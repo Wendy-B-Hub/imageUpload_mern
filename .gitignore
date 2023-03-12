@@ -1,0 +1,6 @@
+node_modules/
+.zshrc
+.idea
+/frontend/spaReact/.idea
+/frontend/spaReact/node_modules/
+/frontend/spaReact/.zshrc
