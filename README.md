@@ -59,6 +59,8 @@ exports.s3Uploadv2=async(files)=>{
  3.post requst to my server to store any extra data
  
  
+ ![https://github.com/Wendy-B-Hub/imageUpload_mern__awsS3/blob/main/uploads/before.png](image.png)
+ 
  in `s3BucketImage.ejs` to handler submit and render image
  
  
