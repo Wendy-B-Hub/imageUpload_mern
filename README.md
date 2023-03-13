@@ -47,3 +47,71 @@ exports.s3Uploadv2=async(files)=>{
 }
 
 ```
+
+
+# get s3 image url and display it to the webpage
+
+
+ 1.get secure url from our server
+ 
+ 2.post the image direclty to the s3 bucket
+ 
+ 3.post requst to my server to store any extra data
+ 
+ 
+ in `s3BucketImage.ejs` to handler submit and render image
+ 
+ 
+ handle get request
+ 
+ ```
+ //using s3 bucket get upload url
+app.get("/s3Url",async (req,res)=>{
+  const url = await generateUploadUrl()
+  console.log(url)
+  res.send({url})
+})
+ 
+ ```
+ 
+ in. `s3Server.js` 
+ 
+ ```javascript
+ 
+ //get the pre-signed url that you can upload the image to the s3, using `PUT` method
+//in the `s3BucketImage.ejs`
+
+exports.generateUploadUrl=async()=>{
+  const region = "us-west-2";
+  const bucketName = process.env.AWS_BUCKET_NAME
+  const accessKeyId = process.env.AWS_ACCESS_KEY_ID
+  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
+  const s3 = new S3({
+    region,
+    accessKeyId,
+    secretAccessKey,
+    signatureVersion:'v4'
+  })
+  const imageName="random";
+  const params=({
+      Bucket:process.env.AWS_BUCKET_NAME,
+      Key:`uploads/${Date.now()}_1235345`,
+      Expires:600
+  })
+
+  const uploadUrl=await s3.getSignedUrlPromise('putObject',params);
+
+  return uploadUrl;
+}
+
+ 
+ ```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+
