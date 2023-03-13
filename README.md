@@ -64,7 +64,7 @@ exports.s3Uploadv2=async(files)=>{
  
  handle get request
  
- ```
+ ```javascript
  //using s3 bucket get upload url
 app.get("/s3Url",async (req,res)=>{
   const url = await generateUploadUrl()
