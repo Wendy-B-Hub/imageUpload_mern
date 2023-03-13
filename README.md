@@ -80,6 +80,11 @@ exports.s3Uploadv2=async(files)=>{
        })
 
        const imageUrl=url.split('?')[0]
+       
+       //3.post requst to my server to store any extra data
+       const img=document.createElement("img");
+       img.src=imageUrl
+       document.body.appendChild(img)
  
  ```
  
@@ -98,6 +103,7 @@ app.get("/s3Url",async (req,res)=>{
  
  in. `s3Server.js` 
  
+ get the pre-signed url
  ```javascript
  
  //get the pre-signed url that you can upload the image to the s3, using `PUT` method
