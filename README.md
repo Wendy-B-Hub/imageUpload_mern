@@ -60,6 +60,8 @@ exports.s3Uploadv2=async(files)=>{
  
  
 ![alt text](https://github.com/Wendy-B-Hub/imageUpload_mern__awsS3/blob/main/uploads/before.png)
+
+![alt text](https://github.com/Wendy-B-Hub/imageUpload_mern__awsS3/blob/main/uploads/after.jpeg)
  
  in `s3BucketImage.ejs` to handler submit and render image
  
