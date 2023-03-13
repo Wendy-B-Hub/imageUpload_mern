@@ -1,10 +1,12 @@
+require("dotenv").config()
 const express=require('express')
 const app=express();
 const path=require('path')
 const mongoose=require('mongoose')
 const multer=require('multer')
 const Image=require('./model/image')
-const cors=require('cors')
+const cors=require('cors');
+const { s3Uploadv2 } = require("./s3Server");
 const port=8000
 
 app.set('views', path.join(__dirname, 'views'));
@@ -23,17 +25,31 @@ mongoose.connect('mongodb://localhost:27017/farmStand')
         console.log(err);
     })
 
-const Storage=multer.diskStorage({
-  destination:'uploads',
-  filename:(req,file,cb)=>{
-    // cb(null,file.originalname);
-    cb(null,file.fieldname+"_"+Date.now()+path.extname(file.originalname))
-  }
-})
+// const Storage=multer.diskStorage({
+//   destination:'uploads',
+//   filename:(req,file,cb)=>{
+//     // cb(null,file.originalname);
+//     cb(null,file.fieldname+"_"+Date.now()+path.extname(file.originalname))
+//   }
+// })
 
-const upload=multer({
-  storage:Storage
-})
+
+//store to s3
+const Storage=multer.memoryStorage()
+
+
+// to filter the file type
+const fileFilter=(req,file,cb)=>{
+  if(file.mimetype.split("/")[0]==="image"){
+    cb(null,true)
+  }else{
+    cb(new Error("file is not a correct type"),false)
+  }
+}
+
+const upload=multer({storage:Storage,fileFilter})
+
+
 
 
 app.get('/',(req,res)=>{
@@ -65,7 +81,8 @@ app.post("/single",upload.single("image"),async (req,res)=>{
 
 //upload multiple images,with max counts of files allowed to upload
 app.post("/many",upload.array("manyImages",5),async(req,res)=>{
-  res.send("uploaded")
+  const result=await s3Uploadv2(req.files)
+  res.json({status:"success",result})
 })
 
  app.listen(port,()=>{
